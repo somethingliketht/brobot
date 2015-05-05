@@ -12,60 +12,106 @@ has, etc!
 [hubot]: http://hubot.github.com
 [generator-hubot]: https://github.com/github/generator-hubot
 
-### Quick Start for HipChat
+### Quick Start: Contributing to Brobot
 
-The easiest way to set up and run a Hubot instance is by creating a local fork, 
-deploying it to Heroku via Git, and connecting your new web app to a group chat 
-as if it were a new user. 
+#### Setup
 
-Here's how this instance was born (on Coud9.io's Debian Linux platform, with
-Node, NPM, and an SSH identity already installed).
+If you'd like to contribute to Brobot and aren't very familiar with GitHub, this
+should be helpful for you. Experienced GitHub hackers can probably skip the 
+details and just follow the steps.
 
-        # install CoffeeScript
-        npm install -g coffee-script
+1. Create a GitHub account
+    
+    Head over to [GitHub.com](https://github.com/) and create a free account. This 
+    should be pretty self-explanatory.
+
+2. Create your own Brobot fork
+
+    Find this repository on GitHub (hint: https://github.com/JustinMorgan/brobot) 
+    and click the Fork button in the upper right. This will create your own fork, so
+    you can work independently.
+
+3. (Optional) Create a Cloud9 IDE account
+
+    You can use any IDE you want, but I recommend [Cloud9](https://c9.io/). It's 
+    free, totally browser-based, and super easy. Cloud9 provides both an IDE and a 
+    cloud-based Linux virtual machine for every project.
+    
+    Go to https://c9.io/ and click the GitHub logo in the top right. It should say 
+    "Sign in with GitHub" when you hover over it. Boom, you've not only created a 
+    Cloud9 account, but also associated it with your personal GitHub account.
+
+4. Create a workspace
+
+    From your Cloud9 dashboard, click Create a New Workspace. The easiest way is to 
+    just clone the fork you created earlier, so choose Clone from URL. You can find 
+    your fork's URL on its GitHub page; it should look something like 
+    https://github.com/JustinMorgan/brobot or git@github.com:JustinMorgan/brobot.git 
+    for SSL.
+
+5. Set Git upstream
+
+    You will push changes to your own fork, but you'll also want to pull in other 
+    people's updates from the main repo. From the command line, type:
+    
+        git remote add upstream https://github.com/JustinMorgan/brobot
+            
+    ...or whatever URL you forked this repo from.
+
+6. Install NPM dependencies
+
+    Brobot depends on several external packages from the Node Package Manager. 
+    Go to `~/workspace` and type:
+    
+        npm install
+    
+
+7. Test locally
+
+    That's it! You should be ready to code. To make sure you have everything, 
+    run Brobot from the command line:
+    
+        ./bin/hubot
+
+#### Contributing your changes
+
+Once you've done some coding, you'll probably want to do the following in order:
+
+1. Create a branch
+
+        git checkout -b Name_Of_Branch
         
-        # generate, install, and lightly configure your local Hubot instance
-        # DON'T DO THIS IF YOU ALREADY PULLED DOWN AN EXISTING HUBOT FORK
-        npm install -g yo generator-hubot  
-        mkdir -p hubot
-        cd hubot
-        yo hubot
+2. Add changes for commit
+
+        git add --all
         
-At this point, the generator will ask for a name and description for your bot, 
-which can be anything you like. Pay attention, however, when it asks which 
-adapter you want to use. Make sure to type `hipchat` if that's what you're 
-using. If you make a mistake, just open `Procfile` and replace it with this:
+3. Commit changes
 
-        web: bin/hubot -a hipchat
+        git commit -am "Your commit message here"
+
+5. Sequence: Merge in any updates from the main (upstream) project
+
+        git checkout master
+        git pull upstream
+        git push origin master
+        git checkout Name_Of_Branch
+        git rebase upstream/master
+
+6. Check for conflicts
+
+    Type `git status` to make sure there were no problems with the merge. See 
+    https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line/ 
+    for tips here.
+
+7. Push to your own fork
+
+        git push origin Name_Of_Branch
         
-Note: You'll also have to edit `Procfile` if you forked Hubot straight from 
-GitHub. Otherwise, if you haven't started a Git repo yet, create one now:
+8. Submit a pull request
 
-        git init
-        git add .
-        git commit -am "Initial Commit"
-
-Now you'll need a place to host your app. Head over to [Heroku][heroku] and 
-create a free account. Follow the instructions to install the Heroku toolbelt, 
-authenticate via SSH, and connect to Heroku. Now you can create your server:
-
-        heroku login
-        heroku create
-
-Finally, go over to HipChat and create a new chat account. You'll have to go
-into the account's settings to the XMPP/Jabber information tab. Find the 
-JID and you'll be ready to configure your Heroku environment:
-
-        heroku config:add HUBOT_HIPCHAT_JID="--- the Brobot account's JID ---"
-        heroku config:add HUBOT_HIPCHAT_PASSWORD="--- the hipchat password ---"
-        heroku config:add HEROKU_URL="https://something-whatever-9999.herokuapp.com/"
-        heroku config:add HUBOT_HEROKU_KEEPALIVE_URL="https://something-whatever-9999.herokuapp.com/"
-        
-Once everything is set up, you can deploy your new bot just by pushing the 
-repo to Heroku via Git. The `heroku create` command should have added Heroku
-to your remotes list. Run the following and cross your fingers:
-
-        git push heroku master
+    Visit your repo on GitHub and look for the green Compare & Pull Request button.
+    Create and submit the pull request; I'll merge it and push the new Brobot 
+    version to the app server.
 
 ### Running Brobot Locally
 
